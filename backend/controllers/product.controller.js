@@ -27,6 +27,21 @@ export const getProducts = async (req, res, next) => {
 
 export const getProductById = async (req, res, next) => {
   try {
+    let { id } = req.query;
+
+    const product = await Product.find({ id });
+
+    if (!product) {
+      return res.status(404).json({
+        success: "false",
+        message: "Unable to find the product",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      product,
+    });
   } catch (error) {
     next(error);
   }
