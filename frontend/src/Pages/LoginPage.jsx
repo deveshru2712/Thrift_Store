@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { ShoppingBag } from "lucide-react";
 import { Link } from "react-router-dom";
 
+import authStore from "../store/authStore";
+
 const LoginPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { login, isLoggingIn } = authStore();
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    login({ email, password });
+  };
+
   return (
     <div className="w-full h-full">
       <nav className="flex justify-start p-4 shadow-md">
@@ -37,17 +48,23 @@ const LoginPage = () => {
           </div>
 
           <form
-            action=""
+            onSubmit={handleFormSubmit}
             className="flex flex-col justify-center items-center gap-4"
           >
             <input
               type="email"
               placeholder="Email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-[350px] border px-4 py-2 rounded-lg"
             />
             <input
               type="password"
               placeholder="Password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-[350px] border px-4 py-2 rounded-lg"
             />
             <div className="flex items-center justify-end w-full">
@@ -55,7 +72,10 @@ const LoginPage = () => {
                 Forgot Password?
               </span>
             </div>
-            <button className="w-full bg-blue-500 text-white font-semibold rounded-lg py-2 hover:bg-blue-500/90 active:scale-105 duration-200">
+            <button
+              type="submit"
+              className="w-full bg-blue-500 text-white font-semibold rounded-lg py-2 hover:bg-blue-500/90 active:scale-105 duration-200"
+            >
               Sign in
             </button>
           </form>

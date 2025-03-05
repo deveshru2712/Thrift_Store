@@ -29,7 +29,7 @@ const list = [
   },
 ];
 
-const HomePage = () => {
+const Welcome = () => {
   const navigate = useNavigate();
   return (
     <div className="w-full h-full">
@@ -85,4 +85,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default Welcome;

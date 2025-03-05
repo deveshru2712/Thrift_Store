@@ -28,9 +28,10 @@ export const signup = async (req, res, next) => {
     genToken(res, newUser._id);
 
     res.status(201).json({
+      success: true,
       id: newUser._id,
-      username: newUser.username,
-      message: "User created successfully.",
+      user: { ...newUser._doc, password: null },
+      message: "Account created successfully",
     });
   } catch (error) {
     next(error);
@@ -59,8 +60,7 @@ export const login = async (req, res, next) => {
     genToken(res, user._id);
     res.status(200).json({
       success: true,
-      id: user._id,
-      username: user.username,
+      user: { ...user._doc, password: null },
       message: "Logged in successfully.",
     });
   } catch (error) {
