@@ -2,26 +2,27 @@ import Product from "../models/product.model.js";
 
 export const getProducts = async (req, res, next) => {
   try {
-    let { pageNo } = req.query;
-    pageNo = parseInt(pageNo);
-    let limit = 10;
+    // let { pageNo } = req.query;
+    // pageNo = parseInt(pageNo);
+    // let limit = 9;
 
     //checking for valid page number
-    if (isNaN(pageNo) || pageNo < 1) {
-      return res.status(404).json({
-        success: false,
-        message: "Unable to fetch products",
-      });
-    }
-
+    // if (isNaN(pageNo) || pageNo < 1) {
+    //   return res.status(404).json({
+    //     success: false,
+    //     message: "Unable to fetch products",
+    //   });
+    //   }
     //this is help in making pagination
 
-    const product = await Product.find()
-      .skip((pageNo - 1) * limit)
-      .limit(limit);
+    // const product = await Product.find()
+    //   .skip((pageNo - 1) * limit)
+    //   .limit(limit);
 
     //this is going to generate random products
     // const product = await Product.aggregate([{ $sample: { size: 10 } }]);
+
+    const product = await Product.find({});
 
     res.status(200).json({ productList: product });
   } catch (error) {

@@ -5,7 +5,7 @@ import Main from "../components/Main";
 
 const HomePage = () => {
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-full flex flex-col overflow-x-hidden">
       <Nav />
       <div className="w-full h-full flex">
         <SideBar />

@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import productStore from "../store/productStore";
 import "ldrs/trefoil";
 
 import ProductBox from "./ProductBox";
+import Pagination from "./Pagination";
 
+import productStore from "../store/productStore";
 const Main = () => {
-  const [pageNo, setPageNo] = useState(1);
+  const [currentPageNo, SetCurrentPageNo] = useState(1);
 
   const { productList, isFetching, getProducts } = productStore();
 
   useEffect(() => {
-    getProducts(pageNo);
-  }, [pageNo]);
+    getProducts();
+  }, []);
 
   return (
     <div className="w-full h-full">
@@ -28,15 +29,18 @@ const Main = () => {
           ></l-trefoil>
         </div>
       ) : (
-        <div className="w-full h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 p-6 gap-4">
-          {productList.map((item) => (
-            <ProductBox
-              key={item._id}
-              img={item.image}
-              title={item.title}
-              price={item.price}
-            />
-          ))}
+        <div className="w-full h-full">
+          <div className="w-full h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 p-6 gap-4">
+            {productList.map((item) => (
+              <ProductBox
+                key={item._id}
+                img={item.image}
+                title={item.title}
+                price={item.price}
+              />
+            ))}
+          </div>
+          <Pagination />
         </div>
       )}
     </div>
