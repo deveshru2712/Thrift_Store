@@ -5,6 +5,7 @@ const authStore = create((set) => ({
   user: null,
   isSigningUp: false,
   isLoggingIn: false,
+  isAuthChecking: false,
   signup: async (credentials) => {
     set({ isSigningUp: true });
     try {
@@ -23,6 +24,16 @@ const authStore = create((set) => ({
       console.log("success");
     } catch (error) {
       set({ user: null, isLoggingIn: false });
+    }
+  },
+  authCheck: async () => {
+    set({ isAuthChecking: true });
+    try {
+      const response = await axios("/api/auth/me");
+      set({ user: response.data.user, isAuthChecking: false });
+      console.log(response.data.user);
+    } catch (error) {
+      set({ isAuthChecking: false, user: null });
     }
   },
 }));

@@ -85,3 +85,11 @@ export const logout = async (req, res, next) => {
     next(error);
   }
 };
+
+export const me = async (req, res, next) => {
+  try {
+    res.status(200).json({ user: req.user });
+  } catch (error) {
+    next(error);
+  }
+};

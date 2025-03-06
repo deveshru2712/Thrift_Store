@@ -12,22 +12,22 @@ const protectRoute = async (req, res, next) => {
     }
 
     //verifying the token
-    const decode = jwt.verify(token, process.env.JWT_KEY);
-    if (!decode) {
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
+    if (!decoded) {
       const error = new Error("Unauthorized - invalid token");
       error.status = 401;
       throw error;
     }
 
     //checking for the user
-    const user = await User.findById(decode.userId).select("-password");
+    const user = await User.findById(decoded.userId).select("-password");
     if (!user) {
       const error = new Error("User not found");
       error.status = 404;
       throw error;
     }
 
-    req.userId = user;
+    req.user = user;
 
     next();
   } catch (error) {
