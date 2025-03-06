@@ -15,11 +15,15 @@ export const getProducts = async (req, res, next) => {
     }
 
     //this is help in making pagination
+
     const product = await Product.find()
       .skip((pageNo - 1) * limit)
       .limit(limit);
 
-    res.status(200).json(product);
+    //this is going to generate random products
+    // const product = await Product.aggregate([{ $sample: { size: 10 } }]);
+
+    res.status(200).json({ productList: product });
   } catch (error) {
     next(error);
   }
