@@ -1,14 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, lazy } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Heart, ShoppingCart, Star, ChevronRight } from "lucide-react";
 import "ldrs/trefoil";
 
 import productStore from "../store/productStore";
+import authStore from "../store/authStore";
 const Nav = lazy(() => import("./Nav"));
 
 const ProductPage = () => {
   const { id } = useParams();
   const { isFetching, product, getProductById } = productStore();
+  const { updateCart } = authStore();
 
   const navigate = useNavigate();
 
@@ -112,7 +114,12 @@ const ProductPage = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors">
+                <button
+                  onClick={() => {
+                    updateCart(product._id);
+                  }}
+                  className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
+                >
                   <ShoppingCart className="h-5 w-5" />
                   Add to Cart
                 </button>

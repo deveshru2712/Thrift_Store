@@ -1,11 +1,11 @@
 import React from "react";
 import { Heart, ShoppingCart } from "lucide-react";
 
-const ProductBox = ({ product, onClick }) => {
+const ProductBox = ({ product, onProductClick, onAddToCart }) => {
   return (
     <div
       className="border-2 h-[230px] rounded-lg p-2 flex flex-col justify-center items-center group"
-      onClick={onClick}
+      onClick={onProductClick}
     >
       <div className=" flex justify-center items-center">
         <img

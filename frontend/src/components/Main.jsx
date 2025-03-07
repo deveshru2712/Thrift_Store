@@ -7,9 +7,11 @@ const ProductBox = lazy(() => import("./ProductBox"));
 const Pagination = lazy(() => import("./Pagination"));
 
 import productStore from "../store/productStore";
+import authStore from "../store/authStore";
 
 const Main = () => {
   const { productList, isFetching, getProducts } = productStore();
+  const { updateCart } = authStore();
 
   const [currentPage, SetCurrentPage] = useState(1);
   const productPerPage = 9;
@@ -51,7 +53,8 @@ const Main = () => {
               <ProductBox
                 key={item._id}
                 product={item}
-                onClick={() => navigate(`/product/${item._id}`)}
+                onProductClick={() => navigate(`/product/${item._id}`)}
+                onAddToCart={() => updateCart(item._id)}
               />
             ))}
           </div>

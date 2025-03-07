@@ -36,6 +36,16 @@ const authStore = create((set) => ({
       set({ isAuthChecking: false, user: null });
     }
   },
+  updateCart: async (id) => {
+    set({ isLoading: true });
+    try {
+      const response = await axios.post(`/api/product/cart/${id}`);
+      authCheck();
+      set({ isLoading: false });
+    } catch (error) {
+      set({ isLoading: false });
+    }
+  },
 }));
 
 export default authStore;

@@ -2,12 +2,10 @@ import React, { lazy } from "react";
 import { ShoppingBag } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const Card = import(() => import("../components/Card"));
-
-const img1 = lazy(() => import("../assets/Best Seller!.png"));
-const img2 = lazy(() => import("../assets/Fast Delivery Package Wings.png"));
-const img3 = lazy(() => import("../assets/RETURN.png"));
-
+const Card = lazy(() => import("../components/Card"));
+import img1 from "../../public/Best Seller!.png";
+import img2 from "../../public/Fast Delivery Package Wings.png";
+import img3 from "../../public/RETURN.png";
 const list = [
   {
     id: 1,
