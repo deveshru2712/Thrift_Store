@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import authStore from "./store/authStore";
 
 import "ldrs/trefoil";
+import ProductPage from "./components/ProductPage";
 
 const LoginPage = lazy(() => import("./Pages/LoginPage"));
 const SignupPage = lazy(() => import("./Pages/SignupPage"));
@@ -48,6 +49,7 @@ const App = () => {
               path="/signup"
               element={user ? <Navigate to={"/"} /> : <SignupPage />}
             />
+            <Route path="/product/:id" element={<ProductPage />} />
           </Routes>
         </div>
       )}

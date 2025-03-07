@@ -6,6 +6,9 @@ import ProductBox from "./ProductBox";
 import Pagination from "./Pagination";
 
 import productStore from "../store/productStore";
+
+import { useNavigate } from "react-router-dom";
+
 const Main = () => {
   const { productList, isFetching, getProducts } = productStore();
 
@@ -21,6 +24,8 @@ const Main = () => {
   for (let i = 1; i <= Math.ceil(productList.length / productPerPage); i++) {
     pages.push(i);
   }
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     getProducts();
@@ -46,9 +51,8 @@ const Main = () => {
             {productList.slice(firstIndex, lastIndex).map((item) => (
               <ProductBox
                 key={item._id}
-                img={item.image}
-                title={item.title}
-                price={item.price}
+                product={item}
+                onClick={() => navigate(`/product/${item._id}`)}
               />
             ))}
           </div>
