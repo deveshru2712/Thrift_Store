@@ -2,12 +2,21 @@ import React from "react";
 import { Heart, ShoppingCart } from "lucide-react";
 
 const ProductBox = ({ product, onProductClick, onAddToCart }) => {
+  const handleAddToCart = (e) => {
+    e.stopPropagation();
+    onAddToCart();
+  };
+
+  const handleAddToFavorites = (e) => {
+    e.stopPropagation();
+  };
+
   return (
     <div
       className="border-2 h-[230px] rounded-lg p-2 flex flex-col justify-center items-center group"
       onClick={onProductClick}
     >
-      <div className=" flex justify-center items-center">
+      <div className="flex justify-center items-center">
         <img
           src={product.image}
           alt={product.title}
@@ -19,13 +28,13 @@ const ProductBox = ({ product, onProductClick, onAddToCart }) => {
           {product.title}
         </div>
         <div className="w-full flex justify-between items-center">
-          <button>
+          <button onClick={handleAddToCart}>
             <ShoppingCart size={20} className="hover:text-blue-500 font-bold" />
           </button>
-          <div className="text-xl font-semibold hover:text-blue-500 ">
+          <div className="text-xl font-semibold hover:text-blue-500">
             ${product.price}
           </div>
-          <button>
+          <button onClick={handleAddToFavorites}>
             <Heart size={20} className="hover:text-red-400 font-bold" />
           </button>
         </div>

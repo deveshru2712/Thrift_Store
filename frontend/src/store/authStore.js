@@ -1,11 +1,13 @@
 import { create } from "zustand";
 import axios from "axios";
 
-const authStore = create((set) => ({
+const authStore = create((set, get) => ({
   user: null,
   isSigningUp: false,
   isLoggingIn: false,
   isAuthChecking: false,
+  isCartUpdating: false,
+
   signup: async (credentials) => {
     set({ isSigningUp: true });
     try {
@@ -16,6 +18,7 @@ const authStore = create((set) => ({
       set({ user: null, isSigningUp: false });
     }
   },
+
   login: async (credentials) => {
     set({ isLoggingIn: true });
     try {
@@ -26,24 +29,51 @@ const authStore = create((set) => ({
       set({ user: null, isLoggingIn: false });
     }
   },
+
   authCheck: async () => {
     set({ isAuthChecking: true });
     try {
       const response = await axios("/api/auth/me");
       set({ user: response.data.user, isAuthChecking: false });
-      console.log(response.data.user);
+      // console.log(response.data.user);
+      // return response.data.user;
     } catch (error) {
       set({ isAuthChecking: false, user: null });
+      return null;
     }
   },
+
   updateCart: async (id) => {
-    set({ isLoading: true });
+    set({ isCartUpdating: true });
     try {
-      const response = await axios.post(`/api/product/cart/${id}`);
-      authCheck();
-      set({ isLoading: false });
+      //updating the cart
+      const cartResponse = await axios.post(`/api/product/cart/${id}`);
+      //fetching for the user state
+      const userResponse = await axios("/api/auth/me");
+
+      //updating for the user state
+      set({
+        user: userResponse.data.user,
+        isCartUpdating: false,
+      });
+
+      // return userResponse.data.user;
     } catch (error) {
-      set({ isLoading: false });
+      set({ isCartUpdating: false });
+      console.error("Cart update failed:", error);
+      return null;
+    }
+  },
+
+  // Add a dedicated method to refresh cart data if needed elsewhere
+  refreshUserData: async () => {
+    try {
+      const response = await axios("/api/auth/me");
+      set({ user: response.data.user });
+      return response.data.user;
+    } catch (error) {
+      console.error("Failed to refresh user data:", error);
+      return null;
     }
   },
 }));

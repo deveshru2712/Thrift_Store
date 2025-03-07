@@ -2,15 +2,20 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Search, ShoppingBag, ShoppingCart } from "lucide-react";
+import authStore from "../store/authStore";
 
 const Nav = () => {
+  const { user } = authStore();
   const navigate = useNavigate();
 
   return (
     <div className="w-full">
       <nav className="flex justify-between items-center py-4 px-8 shadow-md">
         {/* first section */}
-        <div className="flex items-center justify-center gap-1">
+        <div
+          className="flex items-center justify-center gap-1 cursor-pointer"
+          onClick={() => navigate("/")}
+        >
           <ShoppingBag className="size-8 text-blue-500" />
           <span className="text-xl font-bold">Shopify</span>
         </div>
@@ -34,7 +39,7 @@ const Nav = () => {
           >
             <ShoppingCart className="size-6 text-slate-600" />
             <div className="flex justify-center items-center size-5 absolute bg-blue-500 text-white text-base top-0 -right-1 -translate-y-3 translate-x-1/2 rounded-full">
-              4
+              {user.cart.length}
             </div>
           </button>
         </div>

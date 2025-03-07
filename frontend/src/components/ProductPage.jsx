@@ -10,7 +10,7 @@ const Nav = lazy(() => import("./Nav"));
 const ProductPage = () => {
   const { id } = useParams();
   const { isFetching, product, getProductById } = productStore();
-  const { updateCart } = authStore();
+  const { updateCart, isCartUpdating } = authStore();
 
   const navigate = useNavigate();
 
@@ -118,10 +118,23 @@ const ProductPage = () => {
                   onClick={() => {
                     updateCart(product._id);
                   }}
-                  className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
+                  className="flex-1 bg-blue-600 text-white py-4 px-6 rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
                 >
-                  <ShoppingCart className="h-5 w-5" />
-                  Add to Cart
+                  {isCartUpdating ? (
+                    <l-trefoil
+                      size="28"
+                      stroke="4"
+                      stroke-length="0.15"
+                      bg-opacity="0.1"
+                      speed="1.4"
+                      color="white"
+                    ></l-trefoil>
+                  ) : (
+                    <div className="flex justify-center items-center gap-2">
+                      <ShoppingCart className="h-5 w-5" />
+                      Add to Cart
+                    </div>
+                  )}
                 </button>
                 <button className="flex-1 bg-gray-100 text-gray-900 py-3 px-6 rounded-lg font-medium hover:bg-gray-200 transition-colors">
                   Buy Now
