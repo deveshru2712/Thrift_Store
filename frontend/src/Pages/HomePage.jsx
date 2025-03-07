@@ -1,7 +1,8 @@
-import React from "react";
-import Nav from "../components/Nav";
-import SideBar from "../components/SideBar";
-import Main from "../components/Main";
+import React, { lazy } from "react";
+
+const Nav = lazy(() => import("../components/Nav"));
+const SideBar = lazy(() => import("../components/SideBar"));
+const Main = lazy(() => import("../components/Main"));
 
 const HomePage = () => {
   return (

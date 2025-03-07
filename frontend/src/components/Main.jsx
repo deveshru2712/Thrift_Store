@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import "ldrs/trefoil";
 
-import ProductBox from "./ProductBox";
-import Pagination from "./Pagination";
+const ProductBox = lazy(() => import("./ProductBox"));
+const Pagination = lazy(() => import("./Pagination"));
 
 import productStore from "../store/productStore";
-
-import { useNavigate } from "react-router-dom";
 
 const Main = () => {
   const { productList, isFetching, getProducts } = productStore();

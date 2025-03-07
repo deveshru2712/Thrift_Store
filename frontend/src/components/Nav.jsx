@@ -1,7 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import { Search, ShoppingBag, ShoppingCart } from "lucide-react";
 
 const Nav = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="w-full">
       <nav className="flex justify-between items-center py-4 px-8 shadow-md">
@@ -24,7 +28,10 @@ const Nav = () => {
         </div>
         {/* third section */}
         <div className="flex justify-center items-center">
-          <button className="relative active:scale-110 duration-200">
+          <button
+            className="relative active:scale-110 duration-200"
+            onClick={() => navigate("/cart")}
+          >
             <ShoppingCart className="size-6 text-slate-600" />
             <div className="flex justify-center items-center size-5 absolute bg-blue-500 text-white text-base top-0 -right-1 -translate-y-3 translate-x-1/2 rounded-full">
               4

@@ -1,14 +1,15 @@
 import React, { lazy, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import authStore from "./store/authStore";
-
 import "ldrs/trefoil";
-import ProductPage from "./components/ProductPage";
+
+import authStore from "./store/authStore";
 
 const LoginPage = lazy(() => import("./Pages/LoginPage"));
 const SignupPage = lazy(() => import("./Pages/SignupPage"));
 const Welcome = lazy(() => import("./Pages/Welcome"));
 const Home = lazy(() => import("./Pages/HomePage"));
+const ProductPage = lazy(() => import("./components/ProductPage"));
+const CartPage = lazy(() => import("./components/CartPage"));
 
 const App = () => {
   const { user, authCheck, isAuthChecking } = authStore();
@@ -49,7 +50,15 @@ const App = () => {
               path="/signup"
               element={user ? <Navigate to={"/"} /> : <SignupPage />}
             />
-            <Route path="/product/:id" element={<ProductPage />} />
+            <Route
+              path="/product/:id"
+              element={user ? <ProductPage /> : <Navigate to={"/welcome"} />}
+            />
+
+            <Route
+              path="/cart"
+              element={user ? <CartPage /> : <Navigate to={"/welcome"} />}
+            />
           </Routes>
         </div>
       )}

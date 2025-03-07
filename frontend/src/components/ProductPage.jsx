@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Heart, ShoppingCart, Star, ChevronRight } from "lucide-react";
-
 import "ldrs/trefoil";
 
-import Nav from "./Nav";
 import productStore from "../store/productStore";
+const Nav = lazy(() => import("./Nav"));
 
 const ProductPage = () => {
   const { id } = useParams();
