@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import "ldrs/trefoil";
 
 import ProductBox from "./ProductBox";
@@ -6,13 +7,24 @@ import Pagination from "./Pagination";
 
 import productStore from "../store/productStore";
 const Main = () => {
-  const [currentPageNo, SetCurrentPageNo] = useState(1);
-
   const { productList, isFetching, getProducts } = productStore();
+
+  const [currentPage, SetCurrentPage] = useState(1);
+  const productPerPage = 9;
+
+  const pages = [];
+
+  let lastIndex = currentPage * productPerPage;
+  let firstIndex = lastIndex - productPerPage;
+
+  // how many page will be there
+  for (let i = 1; i <= Math.ceil(productList.length / productPerPage); i++) {
+    pages.push(i);
+  }
 
   useEffect(() => {
     getProducts();
-  }, []);
+  }, [currentPage]);
 
   return (
     <div className="w-full h-full">
@@ -31,7 +43,7 @@ const Main = () => {
       ) : (
         <div className="w-full h-full">
           <div className="w-full h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 p-6 gap-4">
-            {productList.map((item) => (
+            {productList.slice(firstIndex, lastIndex).map((item) => (
               <ProductBox
                 key={item._id}
                 img={item.image}
@@ -40,7 +52,11 @@ const Main = () => {
               />
             ))}
           </div>
-          <Pagination />
+          <Pagination
+            currentPage={currentPage}
+            pages={pages}
+            SetCurrentPage={SetCurrentPage}
+          />
         </div>
       )}
     </div>

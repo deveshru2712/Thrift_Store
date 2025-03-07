@@ -3,7 +3,7 @@ import { Heart, ShoppingCart } from "lucide-react";
 
 const ProductBox = ({ title, img, price }) => {
   return (
-    <div className="border-2 rounded-lg p-2 flex flex-col justify-center items-center group">
+    <div className="border-2 h-[230px] rounded-lg p-2 flex flex-col justify-center items-center group">
       <div className=" flex justify-center items-center">
         <img
           src={img}
