@@ -135,6 +135,49 @@ export const addToCart = async (req, res, next) => {
   }
 };
 
+export const deleteFromCart = async (req, res, next) => {
+  const user = req.user;
+  const { id } = req.params;
+  try {
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid product ID",
+      });
+    }
+
+    const product = await Product.findById(id);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    let updatedUser = await User.findOneAndUpdate(
+      { _id: user._id },
+      { $pull: { cart: { product: id } } },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(402).json({
+        success: false,
+        message: "unable to remove from cart",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Product deleted from  cart",
+      user: updatedUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getCart = async (req, res, next) => {
   const user = req.user;
   try {
