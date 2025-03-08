@@ -3,9 +3,9 @@ import { ShoppingBag } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Card = lazy(() => import("../components/Card"));
-import img1 from "../../public/Best Seller!.png";
-import img2 from "../../public/Fast Delivery Package Wings.png";
-import img3 from "../../public/RETURN.png";
+import img1 from "../assets/Best Seller!.png";
+import img2 from "../assets/Fast Delivery Package Wings.png";
+import img3 from "../assets/RETURN.png";
 const list = [
   {
     id: 1,

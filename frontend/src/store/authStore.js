@@ -33,23 +33,22 @@ const authStore = create((set, get) => ({
   authCheck: async () => {
     set({ isAuthChecking: true });
     try {
-      const response = await axios("/api/auth/me");
+      const response = await axios.get("/api/auth/me");
       set({ user: response.data.user, isAuthChecking: false });
-      // console.log(response.data.user);
+      console.log(response.data.user);
       // return response.data.user;
     } catch (error) {
       set({ isAuthChecking: false, user: null });
       return null;
     }
   },
-
   updateCart: async (id) => {
     set({ isCartUpdating: true });
     try {
       //updating the cart
-      const cartResponse = await axios.post(`/api/product/cart/${id}`);
+      const cartResponse = await axios.post(`/api/product/cart/update/${id}`);
       //fetching for the user state
-      const userResponse = await axios("/api/auth/me");
+      const userResponse = await axios.get("/api/auth/me");
 
       //updating for the user state
       set({
@@ -66,16 +65,16 @@ const authStore = create((set, get) => ({
   },
 
   // Add a dedicated method to refresh cart data if needed elsewhere
-  refreshUserData: async () => {
-    try {
-      const response = await axios("/api/auth/me");
-      set({ user: response.data.user });
-      return response.data.user;
-    } catch (error) {
-      console.error("Failed to refresh user data:", error);
-      return null;
-    }
-  },
+  // refreshUserData: async () => {
+  //   try {
+  //     const response = await axios("/api/auth/me");
+  //     set({ user: response.data.user });
+  //     return response.data.user;
+  //   } catch (error) {
+  //     console.error("Failed to refresh user data:", error);
+  //     return null;
+  //   }
+  // },
 }));
 
 export default authStore;

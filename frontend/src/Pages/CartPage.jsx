@@ -1,15 +1,21 @@
 import { ChevronRight } from "lucide-react";
-import React, { lazy } from "react";
+import React, { lazy, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import authStore from "../store/authStore";
+import productStore from "../store/productStore";
 
 const Nav = lazy(() => import("../components/Nav"));
 
 const CartPage = () => {
   const navigate = useNavigate();
 
+  const { fetchCart, cart } = productStore();
   const { user } = authStore();
+
+  useEffect(() => {
+    fetchCart();
+  }, [user]);
 
   return (
     <div className="w-full h-full">
@@ -30,10 +36,25 @@ const CartPage = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2">
-        <div>
-          {user.cart.map((items) => (
-            <div>{items.productId}</div>
-          ))}
+        <div className="">
+          {/* {user.cart.map((item) => (
+            <div key={item._id} className="flex justify-between items-center">
+              <div className="flex justify-center items-center gap-2">
+                <div>
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="size-32 object-contain"
+                  />
+                </div>
+                <div className="flex flex-col justify-center items-center">
+                  <span>{item.title}</span>
+                  <span>{item.price}</span>
+                </div>
+              </div>
+              <div> delete icon</div>
+            </div>
+          ))} */}
         </div>
         <div className="border w-1/2 flex flex-col justify-center items-center p-6 gap-4">
           <h1 className="text-2xl font-semibold text-slate-800 text-center">

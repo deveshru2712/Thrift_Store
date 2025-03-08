@@ -3,7 +3,8 @@ import {
   searchProducts,
   getProductById,
   getProducts,
-  updateCart,
+  addToCart,
+  getCart,
   // createProducts,
 } from "../controllers/product.controller.js";
 
@@ -15,7 +16,8 @@ router.get("/:id", protectRoute, getProductById);
 router.get("/", protectRoute, getProducts);
 router.get("/search", protectRoute, searchProducts);
 
-router.post("/cart/:id", protectRoute, updateCart);
+router.post("/cart/update/:id", protectRoute, addToCart);
+router.get("/cart", protectRoute, getCart);
 
 // router.post("/create", createProducts);
 

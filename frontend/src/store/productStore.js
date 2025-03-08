@@ -4,11 +4,12 @@ import { create } from "zustand";
 const productStore = create((set) => ({
   isFetching: false,
   product: null,
+  cart: null,
   productList: [],
   getProducts: async () => {
     set({ isFetching: true });
     try {
-      const response = await axios(`/api/product/`);
+      const response = await axios.get(`/api/product/`);
       set({ productList: response.data.productList, isFetching: false });
     } catch (error) {
       set({ productList: [], isFetching: false });
@@ -18,7 +19,7 @@ const productStore = create((set) => ({
   getProductById: async (id) => {
     set({ isFetching: true });
     try {
-      const response = await axios(`/api/product/${id}`);
+      const response = await axios.get(`/api/product/${id}`);
       const product = response.data.product;
       set({ product, isFetching: false });
 
@@ -27,6 +28,17 @@ const productStore = create((set) => ({
     } catch (error) {
       set({ product: null, isFetching: false });
       return null;
+    }
+  },
+  fetchCart: async () => {
+    set({ isFetching: true });
+    try {
+      const response = await axios.get("/api/product/cart");
+      console.log(response.data.cart);
+      set({ cart: response.data.cart, isFetching: false });
+      // return
+    } catch (error) {
+      set({ cart: null, isFetching: false });
     }
   },
 }));

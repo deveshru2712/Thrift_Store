@@ -8,8 +8,8 @@ const LoginPage = lazy(() => import("./Pages/LoginPage"));
 const SignupPage = lazy(() => import("./Pages/SignupPage"));
 const Welcome = lazy(() => import("./Pages/Welcome"));
 const Home = lazy(() => import("./Pages/HomePage"));
-const ProductPage = lazy(() => import("./components/ProductPage"));
-const CartPage = lazy(() => import("./components/CartPage"));
+const ProductPage = lazy(() => import("./Pages/ProductPage"));
+const CartPage = lazy(() => import("./Pages/CartPage"));
 
 const App = () => {
   const { user, authCheck, isAuthChecking } = authStore();

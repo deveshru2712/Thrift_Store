@@ -1,5 +1,7 @@
+import { json } from "express";
 import Product from "../models/product.model.js";
 import User from "../models/user.model.js";
+import { decodeBase64 } from "bcryptjs";
 
 export const getProducts = async (req, res, next) => {
   try {
@@ -67,7 +69,7 @@ export const searchProducts = async (req, res, next) => {
   }
 };
 
-export const updateCart = async (req, res, next) => {
+export const addToCart = async (req, res, next) => {
   const { id } = req.params;
   const user = req.user;
   try {
@@ -89,51 +91,71 @@ export const updateCart = async (req, res, next) => {
 
     let updatedUser;
 
-    // const checkCart = user.cart.includes(id);
     const checkCart = user.cart
-      .map((item) => item.productId.toString())
+      .map((item) => item.product.toString())
       .includes(id);
-    //checking if the product is already in the user cart
 
     if (checkCart) {
-      updatedUser = await User.findByIdAndUpdate(
-        { _id: user._id },
-        { $pull: { cart: { productId: id } } },
-        { new: true } // in order to return the new document
-      );
-
-      if (!updatedUser) {
-        return res.status(500).json({
-          success: false,
-          message: "Failed to update cart",
-        });
-      }
-
-      return res.status(200).json({
-        success: true,
-        message: "Product removed from the cart",
-        user: updatedUser,
-      });
-    } else {
-      updatedUser = await User.findByIdAndUpdate(
-        { _id: user._id },
-        { $push: { cart: { productId: id } } },
+      updatedUser = await User.findOneAndUpdate(
+        { _id: user._id, "cart.product": id },
+        { $inc: { "cart.$.quantity": 1 } },
         { new: true }
       );
 
       if (!updatedUser) {
-        return res.status(500).json({
+        return res.status(402).json({
           success: false,
-          message: "Failed to update cart",
+          message: "unable to add to cart",
         });
       }
+    } else {
+      updatedUser = await User.findOneAndUpdate(
+        { _id: user._id },
+        {
+          $push: { cart: { product: id } },
+        },
+        { new: true }
+      );
 
-      return res.status(200).json({
-        success: true,
-        message: "Product added to the cart",
-        user: updatedUser,
+      if (!updatedUser) {
+        return res.status(402).json({
+          success: false,
+          message: "unable to add to cart",
+        });
+      }
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Product added to the cart",
+      user: updatedUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getCart = async (req, res, next) => {
+  const user = req.user;
+  try {
+    // const loggedUser = await User.findOne(user._id).populate("cart.product");
+    const loggedUser = await User.findOne({ _id: user._id }).populate(
+      "cart.product"
+    );
+    console.log(loggedUser);
+    if (!loggedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "Unable to fetch the cart",
       });
     }
+
+    const cart = loggedUser.cart;
+
+    return res.status(200).json({
+      success: true,
+      cart: cart,
+    });
   } catch (error) {
     next(error);
   }

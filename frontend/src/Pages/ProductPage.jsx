@@ -5,7 +5,7 @@ import "ldrs/trefoil";
 
 import productStore from "../store/productStore";
 import authStore from "../store/authStore";
-const Nav = lazy(() => import("./Nav"));
+const Nav = lazy(() => import("../components/Nav"));
 
 const ProductPage = () => {
   const { id } = useParams();
