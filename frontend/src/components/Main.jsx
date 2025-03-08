@@ -11,7 +11,7 @@ import authStore from "../store/authStore";
 
 const Main = () => {
   const { productList, isFetching, getProducts } = productStore();
-  const { updateCart } = authStore();
+  const { addCart } = authStore();
 
   const [currentPage, SetCurrentPage] = useState(1);
   const productPerPage = 9;
@@ -54,7 +54,7 @@ const Main = () => {
                 key={item._id}
                 product={item}
                 onProductClick={() => navigate(`/product/${item._id}`)}
-                onAddToCart={() => updateCart(item._id)}
+                onAddToCart={() => addCart(item._id)}
               />
             ))}
           </div>

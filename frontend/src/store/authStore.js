@@ -42,11 +42,11 @@ const authStore = create((set, get) => ({
       return null;
     }
   },
-  updateCart: async (id) => {
+  addCart: async (id) => {
     set({ isCartUpdating: true });
     try {
       //updating the cart
-      const cartResponse = await axios.post(`/api/product/cart/update/${id}`);
+      const cartResponse = await axios.post(`/api/cart/add/${id}`);
       //fetching for the user state
       const userResponse = await axios.get("/api/auth/me");
 

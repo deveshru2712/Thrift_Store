@@ -10,7 +10,7 @@ const Nav = lazy(() => import("../components/Nav"));
 const ProductPage = () => {
   const { id } = useParams();
   const { isFetching, product, getProductById } = productStore();
-  const { updateCart, isCartUpdating } = authStore();
+  const { addCart, isCartUpdating } = authStore();
 
   const navigate = useNavigate();
 
@@ -116,7 +116,7 @@ const ProductPage = () => {
               <div className="flex flex-col sm:flex-row gap-4">
                 <button
                   onClick={() => {
-                    updateCart(product._id);
+                    addCart(product._id);
                   }}
                   className="flex-1 bg-blue-600 text-white py-4 px-6 rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
                 >

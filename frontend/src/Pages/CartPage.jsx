@@ -15,6 +15,7 @@ const CartPage = () => {
 
   useEffect(() => {
     fetchCart();
+    console.log(cart);
   }, [user]);
 
   return (

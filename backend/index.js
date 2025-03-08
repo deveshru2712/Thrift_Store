@@ -7,6 +7,7 @@ import connectToDb from "./config/Db.js";
 import errorHandler from "./middleware/errorHandler.js";
 import authRouter from "./routes/auth.routes.js";
 import productRouter from "./routes/product.routes.js";
+import cartRouter from "./routes/cart.routes.js";
 
 const app = express();
 dotenv.config();
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/product", productRouter);
+app.use("/api/cart", cartRouter);
 
 app.use(errorHandler);
 

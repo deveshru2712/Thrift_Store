@@ -33,7 +33,7 @@ const productStore = create((set) => ({
   fetchCart: async () => {
     set({ isFetching: true });
     try {
-      const response = await axios.get("/api/product/cart");
+      const response = await axios.get("/api/cart");
       console.log(response.data.cart);
       set({ cart: response.data.cart, isFetching: false });
       // return
