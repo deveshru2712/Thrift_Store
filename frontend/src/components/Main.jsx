@@ -7,11 +7,12 @@ const ProductBox = lazy(() => import("./ProductBox"));
 const Pagination = lazy(() => import("./Pagination"));
 
 import productStore from "../store/productStore";
+import cartStore from "../store/cartStore";
 import authStore from "../store/authStore";
 
 const Main = () => {
-  const { productList, isFetching, getProducts } = productStore();
-  const { addCart } = authStore();
+  const { productList, isLoading, getProducts } = productStore();
+  const { addCart } = cartStore();
 
   const [currentPage, SetCurrentPage] = useState(1);
   const productPerPage = 9;
@@ -34,7 +35,7 @@ const Main = () => {
 
   return (
     <div className="w-full h-full">
-      {isFetching ? (
+      {isLoading ? (
         //loading animation when the product list was fetched
         <div className="w-full h-full flex justify-center items-center">
           <l-trefoil

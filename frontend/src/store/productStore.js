@@ -2,10 +2,9 @@ import axios from "axios";
 import { create } from "zustand";
 
 const productStore = create((set) => ({
-  isFetching: false,
   product: null,
-  cart: null,
   productList: [],
+  isLoading: false,
   getProducts: async () => {
     set({ isFetching: true });
     try {
@@ -28,17 +27,6 @@ const productStore = create((set) => ({
     } catch (error) {
       set({ product: null, isFetching: false });
       return null;
-    }
-  },
-  fetchCart: async () => {
-    set({ isFetching: true });
-    try {
-      const response = await axios.get("/api/cart");
-      console.log(response.data.cart);
-      set({ cart: response.data.cart, isFetching: false });
-      // return
-    } catch (error) {
-      set({ cart: null, isFetching: false });
     }
   },
 }));

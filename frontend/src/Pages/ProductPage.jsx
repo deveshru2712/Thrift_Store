@@ -4,13 +4,13 @@ import { Heart, ShoppingCart, Star, ChevronRight } from "lucide-react";
 import "ldrs/trefoil";
 
 import productStore from "../store/productStore";
-import authStore from "../store/authStore";
+import cartStore from "../store/cartStore";
 const Nav = lazy(() => import("../components/Nav"));
 
 const ProductPage = () => {
   const { id } = useParams();
-  const { isFetching, product, getProductById } = productStore();
-  const { addCart, isCartUpdating } = authStore();
+  const { product, getProductById, isLoading } = productStore();
+  const { addCart, isCartUpdating, isFetching } = cartStore();
 
   const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ const ProductPage = () => {
     getProductById(id);
   }, [id]);
 
-  if (isFetching || !product) {
+  if (isLoading || !product) {
     return (
       <div className="w-full h-screen flex justify-center items-center bg-gray-50">
         <l-trefoil
