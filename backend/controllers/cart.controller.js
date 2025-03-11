@@ -60,7 +60,7 @@ export const addToCart = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       message: "Product added to the cart",
-      user: updatedUser,
+      user: updatedUser, // update this with cart
     });
   } catch (error) {
     next(error);
@@ -79,7 +79,6 @@ export const deleteFromCart = async (req, res, next) => {
     }
 
     const product = await Product.findById(id);
-
     if (!product) {
       return res.status(404).json({
         success: false,
@@ -87,11 +86,21 @@ export const deleteFromCart = async (req, res, next) => {
       });
     }
 
-    let updatedUser = await User.findOneAndUpdate(
+    const cartItem = user.cart.find((item) => item.product.toString() === id);
+
+    if (!cartItem) {
+      return res.status(200).json({
+        success: false,
+        message: "Product not found in cart",
+      });
+    }
+
+    let updatedUser = await User.findByIdAndUpdate(
       { _id: user._id },
       { $pull: { cart: { product: id } } },
       { new: true }
     );
+    console.log(updatedUser);
 
     if (!updatedUser) {
       return res.status(402).json({
@@ -103,7 +112,7 @@ export const deleteFromCart = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       message: "Product deleted from  cart",
-      user: updatedUser,
+      cart: updatedUser.cart,
     });
   } catch (error) {
     next(error);
@@ -137,6 +146,7 @@ export const getCart = async (req, res, next) => {
 export const updateQuantity = async (req, res, next) => {
   const { method, id } = req.params;
   const user = req.user;
+
   try {
     if (!method) {
       return res.status(400).json({
@@ -144,12 +154,14 @@ export const updateQuantity = async (req, res, next) => {
         message: "Unable to perform the action",
       });
     }
+
     if (!id) {
       return res.status(400).json({
         success: false,
         message: "Invalid product ID",
       });
     }
+
     const product = await Product.findById(id);
     if (!product) {
       return res.status(404).json({
@@ -157,50 +169,86 @@ export const updateQuantity = async (req, res, next) => {
         message: "Product not found",
       });
     }
+
+    // Find the cart item
+    const cartItem = user.cart.find((item) => item.product.toString() === id);
+    if (!cartItem) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found in cart",
+      });
+    }
+
     let updatedUser;
+
     if (method === "inc") {
-      //in case of increment
+      // Increment quantity
+      if (cartItem.quantity < 100) {
+        updatedUser = await User.findOneAndUpdate(
+          { _id: user._id, "cart.product": id },
+          { $inc: { "cart.$.quantity": 1 } },
+          { new: true }
+        );
 
-      updatedUser = await User.findOneAndUpdate(
-        { _id: user._id, "cart.product": id },
-        { $inc: { "cart.$.quantity": 1 } },
-        { new: true }
-      );
-
-      if (updatedUser) {
-        const cart = updatedUser.cart;
+        if (updatedUser) {
+          return res.status(200).json({
+            success: true,
+            message: "Increased the count",
+            cart: updatedUser.cart,
+          });
+        } else {
+          return res.status(500).json({
+            success: false,
+            message: "Unable to perform the action",
+          });
+        }
+      } else {
         return res.status(200).json({
           success: true,
-          message: "increased the count",
-          cart,
-        });
-      } else {
-        return res.status(500).json({
-          success: false,
-          message: "Unable to perform the action",
+          message: "Already at the maximum quantity",
+          cart: user.cart,
         });
       }
     } else {
-      //decreasing the quantity
+      // Decrement quantity
+      if (cartItem.quantity > 1) {
+        updatedUser = await User.findOneAndUpdate(
+          { _id: user._id, "cart.product": id },
+          { $inc: { "cart.$.quantity": -1 } },
+          { new: true }
+        );
 
-      updatedUser = await User.findOneAndUpdate(
-        { _id: user._id, "cart.product": id },
-        { $inc: { "cart.$.quantity": -1 } },
-        { new: true }
-      );
+        if (updatedUser) {
+          return res.status(200).json({
+            success: true,
+            message: "Decreased the count",
+            cart: updatedUser.cart,
+          });
+        } else {
+          return res.status(500).json({
+            success: false,
+            message: "Unable to perform the action",
+          });
+        }
+      } else if (cartItem.quantity === 1) {
+        updatedUser = await User.findByIdAndUpdate(
+          user._id,
+          { $pull: { cart: { product: id } } },
+          { new: true }
+        );
 
-      if (updatedUser) {
-        const cart = updatedUser.cart;
-        return res.status(200).json({
-          success: true,
-          message: "decreased the count",
-          cart,
-        });
-      } else {
-        return res.status(500).json({
-          success: false,
-          message: "Unable to perform the action",
-        });
+        if (updatedUser) {
+          return res.status(200).json({
+            success: true,
+            message: "Item removed from cart",
+            cart: updatedUser.cart,
+          });
+        } else {
+          return res.status(500).json({
+            success: false,
+            message: "Unable to remove the item",
+          });
+        }
       }
     }
   } catch (error) {

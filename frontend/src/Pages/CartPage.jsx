@@ -1,4 +1,4 @@
-import { ChevronRight, Meh } from "lucide-react";
+import { ChevronRight, Meh, PackageX } from "lucide-react";
 import React, { lazy, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -21,7 +21,9 @@ const CartPage = () => {
 
   const navigate = useNavigate();
 
-  const { fetchCart, isFetching, cart, updateQuantity } = cartStore();
+  const { fetchCart, deleteFromCart, isFetching, cart, updateQuantity } =
+    cartStore();
+
   const { user } = authStore();
 
   useEffect(() => {
@@ -31,6 +33,11 @@ const CartPage = () => {
   const onClickHandler = async (method, id) => {
     await updateQuantity(method, id);
     fetchCart();
+  };
+
+  const removeFromCart = (id) => {
+    console.log("clicked");
+    deleteFromCart(id);
   };
 
   return (
@@ -70,7 +77,7 @@ const CartPage = () => {
               ></l-trefoil>
             </div>
           ) : cart && cart.length > 0 ? (
-            <div className="w-full h-full p-4">
+            <div className="w-full p-4">
               <div className="flex flex-col w-full justify-center items-center shadow-lg rounded-md gap-4 px-8">
                 {cart.map((item, index) => (
                   <div
@@ -118,13 +125,16 @@ const CartPage = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="flex flex-col justify-center items-start">
+                    <div className="flex flex-col justify-center items-start gap-1">
                       <span className="text-xl font-semibold text-slate-800">
                         ${item.product.price}
                       </span>
-                      <span className="text-xl font-semibold text-blue-500">
-                        Remove
-                      </span>
+                      <button
+                        onClick={() => removeFromCart(item.product._id)}
+                        className="text-center text-xl font-semibold text-blue-500"
+                      >
+                        <PackageX />
+                      </button>
                     </div>
                   </div>
                 ))}
