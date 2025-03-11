@@ -31,6 +31,17 @@ const cartStore = create((set) => ({
       return response.data.cart;
     } catch (error) {
       set({ cart: null, isFetching: false });
+      return null;
+    }
+  },
+  updateQuantity: async (method, id) => {
+    set({ isCartUpdating: true });
+    try {
+      const response = await axios.post(`/api/cart/${method}/${id}`);
+      set({ cart: response.data.cart, isCartUpdating: false });
+    } catch (error) {
+      set({ isCartUpdating: false });
+      return null;
     }
   },
 }));

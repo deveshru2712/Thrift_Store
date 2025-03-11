@@ -21,9 +21,6 @@ const productStore = create((set) => ({
       const response = await axios.get(`/api/product/${id}`);
       const product = response.data.product;
       set({ product, isFetching: false });
-
-      // console.log(response.data.product);
-      return product;
     } catch (error) {
       set({ product: null, isFetching: false });
       return null;

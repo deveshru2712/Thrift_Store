@@ -1,4 +1,4 @@
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Meh } from "lucide-react";
 import React, { lazy, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -10,16 +10,28 @@ import cartStore from "../store/cartStore";
 const Nav = lazy(() => import("../components/Nav"));
 
 const CartPage = () => {
+  const calculate = () => {
+    let total = 0;
+    if (!cart || cart.length === 0) return total;
+    else {
+      cart.forEach((item) => (total += item.product.price * item.quantity));
+      return total;
+    }
+  };
+
   const navigate = useNavigate();
 
-  const count = 0;
-
-  const { fetchCart, isFetching, cart } = cartStore();
+  const { fetchCart, isFetching, cart, updateQuantity } = cartStore();
   const { user } = authStore();
 
   useEffect(() => {
     fetchCart();
   }, [user]);
+
+  const onClickHandler = async (method, id) => {
+    await updateQuantity(method, id);
+    fetchCart();
+  };
 
   return (
     <div className="w-full h-full overflow-x-hidden">
@@ -60,10 +72,12 @@ const CartPage = () => {
           ) : cart && cart.length > 0 ? (
             <div className="w-full h-full p-4">
               <div className="flex flex-col w-full justify-center items-center shadow-lg rounded-md gap-4 px-8">
-                {cart.map((item) => (
+                {cart.map((item, index) => (
                   <div
                     key={item.product._id}
-                    className="w-full flex justify-between items-center p-4 border-b-2"
+                    className={`w-full flex justify-between items-center p-4 ${
+                      index !== cart.length - 1 ? "border-b-2" : ""
+                    }`}
                   >
                     <div className="flex justify-center items-center">
                       <div>
@@ -82,13 +96,23 @@ const CartPage = () => {
                         </span>
 
                         <div className="border rounded-md bg-slate-100">
-                          <button className="w-6 text-xl font-semibold p-1 hover:bg-blue-500 hover:text-white rounded-md">
+                          <button
+                            className="w-6 text-xl font-semibold p-1 hover:bg-blue-500 hover:text-white rounded-md"
+                            onClick={() =>
+                              onClickHandler("desc", item.product._id)
+                            }
+                          >
                             -
                           </button>
                           <span className="w-12 text-xl font-semibold p-1 bg-white">
-                            {count}
+                            {item.quantity}
                           </span>
-                          <button className="w-6 text-xl font-semibold p-1 hover:bg-blue-500 hover:text-white rounded-md">
+                          <button
+                            className="w-6 text-xl font-semibold p-1 hover:bg-blue-500 hover:text-white rounded-md"
+                            onClick={() =>
+                              onClickHandler("inc", item.product._id)
+                            }
+                          >
                             +
                           </button>
                         </div>
@@ -138,7 +162,13 @@ const CartPage = () => {
             <div className="border-b w-full"></div>
             <div className="w-full flex justify-between">
               <span className="text-base font-bold">SubTotal</span>
-              <span className="text-base font-semibold">$300</span>
+              <span className="text-base font-semibold">
+                {isFetching ? (
+                  <span>loading...</span>
+                ) : (
+                  <span>${calculate()}</span>
+                )}
+              </span>
             </div>
             <div className="w-full flex justify-between">
               <span className="text-base font-bold">Tax</span>
@@ -147,7 +177,13 @@ const CartPage = () => {
 
             <div className="w-full flex justify-between">
               <span className="text-xl font-bold">Total</span>
-              <span className="text-lg font-semibold">$300</span>
+              <span className="text-lg font-semibold">
+                {isFetching ? (
+                  <span>loading...</span>
+                ) : (
+                  <span>${calculate()}</span>
+                )}
+              </span>
             </div>
             <button className="w-full py-3 bg-blue-500 text-white font-bold text-2xl cursor-pointer rounded-lg active:scale-110 duration-200 hover:bg-blue-500/90">
               Checkout

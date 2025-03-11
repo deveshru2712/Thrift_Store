@@ -11,9 +11,9 @@ const authStore = create((set, get) => ({
     try {
       const response = await axios.post("/api/auth/signup", credentials);
       set({ user: response.data.user, isSigningUp: false });
-      console.log("success");
     } catch (error) {
       set({ user: null, isSigningUp: false });
+      return null;
     }
   },
 
@@ -22,9 +22,9 @@ const authStore = create((set, get) => ({
     try {
       const response = await axios.post("/api/auth/login", credentials);
       set({ user: response.data.user, isLoggingIn: false });
-      console.log("success");
     } catch (error) {
       set({ user: null, isLoggingIn: false });
+      return null;
     }
   },
 
@@ -33,8 +33,6 @@ const authStore = create((set, get) => ({
     try {
       const response = await axios.get("/api/auth/me");
       set({ user: response.data.user, isAuthChecking: false });
-      console.log(response.data.user);
-      // return response.data.user;
     } catch (error) {
       set({ isAuthChecking: false, user: null });
       return null;

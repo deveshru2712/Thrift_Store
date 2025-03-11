@@ -133,3 +133,77 @@ export const getCart = async (req, res, next) => {
     next(error);
   }
 };
+
+export const updateQuantity = async (req, res, next) => {
+  const { method, id } = req.params;
+  const user = req.user;
+  try {
+    if (!method) {
+      return res.status(400).json({
+        success: false,
+        message: "Unable to perform the action",
+      });
+    }
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid product ID",
+      });
+    }
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+    let updatedUser;
+    if (method === "inc") {
+      //in case of increment
+
+      updatedUser = await User.findOneAndUpdate(
+        { _id: user._id, "cart.product": id },
+        { $inc: { "cart.$.quantity": 1 } },
+        { new: true }
+      );
+
+      if (updatedUser) {
+        const cart = updatedUser.cart;
+        return res.status(200).json({
+          success: true,
+          message: "increased the count",
+          cart,
+        });
+      } else {
+        return res.status(500).json({
+          success: false,
+          message: "Unable to perform the action",
+        });
+      }
+    } else {
+      //decreasing the quantity
+
+      updatedUser = await User.findOneAndUpdate(
+        { _id: user._id, "cart.product": id },
+        { $inc: { "cart.$.quantity": -1 } },
+        { new: true }
+      );
+
+      if (updatedUser) {
+        const cart = updatedUser.cart;
+        return res.status(200).json({
+          success: true,
+          message: "decreased the count",
+          cart,
+        });
+      } else {
+        return res.status(500).json({
+          success: false,
+          message: "Unable to perform the action",
+        });
+      }
+    }
+  } catch (error) {
+    next(error);
+  }
+};
