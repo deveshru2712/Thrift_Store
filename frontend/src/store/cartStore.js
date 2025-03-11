@@ -49,7 +49,6 @@ const cartStore = create((set) => ({
     try {
       const response = await axios.post(`/api/cart/remove/${id}`);
       set({ cart: response.data.cart, isCartUpdating: false });
-      return response.data.cart;
     } catch (error) {
       set({ isCartUpdating: false });
       return null;

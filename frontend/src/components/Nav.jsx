@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Search, ShoppingBag, ShoppingCart } from "lucide-react";
-import authStore from "../store/authStore";
+import cartStore from "../store/cartStore";
 
 const Nav = () => {
-  const { user } = authStore();
+  const { cart, isFetching, fetchCart } = cartStore();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchCart();
+  }, []);
 
   return (
     <div className="w-full">
@@ -38,9 +42,11 @@ const Nav = () => {
             onClick={() => navigate("/cart")}
           >
             <ShoppingCart className="size-6 text-slate-600" />
-            <div className="flex justify-center items-center size-5 absolute bg-blue-500 text-white text-base top-0 -right-1 -translate-y-3 translate-x-1/2 rounded-full">
-              {user.cart.length}
-            </div>
+            {!isFetching && cart && (
+              <div className="flex justify-center items-center size-5 absolute bg-blue-500 text-white text-base top-0 -right-1 -translate-y-3 translate-x-1/2 rounded-full">
+                {cart.length}
+              </div>
+            )}
           </button>
         </div>
       </nav>

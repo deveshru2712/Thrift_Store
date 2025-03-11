@@ -10,7 +10,7 @@ const Nav = lazy(() => import("../components/Nav"));
 const ProductPage = () => {
   const { id } = useParams();
   const { product, getProductById, isLoading } = productStore();
-  const { addCart, isCartUpdating, isFetching } = cartStore();
+  const { addCart, isCartUpdating } = cartStore();
 
   const navigate = useNavigate();
 

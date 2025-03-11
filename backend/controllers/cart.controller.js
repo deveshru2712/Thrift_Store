@@ -32,7 +32,7 @@ export const addToCart = async (req, res, next) => {
         { _id: user._id, "cart.product": id },
         { $inc: { "cart.$.quantity": 1 } },
         { new: true }
-      );
+      ).select("-password");
 
       if (!updatedUser) {
         return res.status(402).json({
@@ -43,11 +43,9 @@ export const addToCart = async (req, res, next) => {
     } else {
       updatedUser = await User.findOneAndUpdate(
         { _id: user._id },
-        {
-          $push: { cart: { product: id } },
-        },
+        { $push: { cart: { product: id } } },
         { new: true }
-      );
+      ).select("-password");
 
       if (!updatedUser) {
         return res.status(402).json({
@@ -99,9 +97,7 @@ export const deleteFromCart = async (req, res, next) => {
       { _id: user._id },
       { $pull: { cart: { product: id } } },
       { new: true }
-    );
-    console.log(updatedUser);
-
+    ).select("-password");
     if (!updatedUser) {
       return res.status(402).json({
         success: false,
@@ -122,9 +118,9 @@ export const deleteFromCart = async (req, res, next) => {
 export const getCart = async (req, res, next) => {
   const user = req.user;
   try {
-    const loggedUser = await User.findOne({ _id: user._id }).populate(
-      "cart.product"
-    );
+    const loggedUser = await User.findOne({ _id: user._id })
+      .populate("cart.product")
+      .select("-password");
 
     if (!loggedUser) {
       return res.status(404).json({
@@ -188,7 +184,7 @@ export const updateQuantity = async (req, res, next) => {
           { _id: user._id, "cart.product": id },
           { $inc: { "cart.$.quantity": 1 } },
           { new: true }
-        );
+        ).select("-password");
 
         if (updatedUser) {
           return res.status(200).json({
@@ -216,7 +212,7 @@ export const updateQuantity = async (req, res, next) => {
           { _id: user._id, "cart.product": id },
           { $inc: { "cart.$.quantity": -1 } },
           { new: true }
-        );
+        ).select("-password");
 
         if (updatedUser) {
           return res.status(200).json({
@@ -235,7 +231,7 @@ export const updateQuantity = async (req, res, next) => {
           user._id,
           { $pull: { cart: { product: id } } },
           { new: true }
-        );
+        ).select("-password");
 
         if (updatedUser) {
           return res.status(200).json({

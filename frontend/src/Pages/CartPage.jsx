@@ -1,5 +1,5 @@
-import { ChevronRight, Meh, PackageX } from "lucide-react";
-import React, { lazy, useEffect, useState } from "react";
+import { ChevronRight, PackageX } from "lucide-react";
+import React, { lazy, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "ldrs/trefoil";
@@ -21,8 +21,14 @@ const CartPage = () => {
 
   const navigate = useNavigate();
 
-  const { fetchCart, deleteFromCart, isFetching, cart, updateQuantity } =
-    cartStore();
+  const {
+    fetchCart,
+    deleteFromCart,
+    isFetching,
+    cart,
+    updateQuantity,
+    isCartUpdating,
+  } = cartStore();
 
   const { user } = authStore();
 
@@ -35,9 +41,9 @@ const CartPage = () => {
     fetchCart();
   };
 
-  const removeFromCart = (id) => {
-    console.log("clicked");
-    deleteFromCart(id);
+  const removeFromCart = async (id) => {
+    await deleteFromCart(id);
+    await fetchCart();
   };
 
   return (
@@ -65,7 +71,7 @@ const CartPage = () => {
         {/* first section */}
 
         <div className="">
-          {isFetching ? (
+          {isFetching || isCartUpdating ? (
             <div className="w-full h-full flex justify-center items-center">
               <l-trefoil
                 size="40"
@@ -87,11 +93,14 @@ const CartPage = () => {
                     }`}
                   >
                     <div className="flex justify-center items-center">
-                      <div>
+                      <div className="cursor-pointer active:scale-105 duration-200">
                         <img
                           src={item.product.image}
                           alt={item.product.title}
                           className="size-24 object-contain"
+                          onClick={() =>
+                            navigate(`/product/${item.product._id}`)
+                          }
                         />
                       </div>
                       <div className="w-72 flex flex-col justify-center items-start gap-2">
