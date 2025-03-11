@@ -9,12 +9,10 @@ const cartStore = create((set) => ({
     set({ isCartUpdating: true });
     try {
       //updating the cart
-      const cartResponse = await axios.post(`/api/cart/add/${id}`);
-      //fetching for the user state
-      const userResponse = await axios.get("/api/auth/me");
+      const response = await axios.post(`/api/cart/add/${id}`);
 
       set({
-        user: userResponse.data.user,
+        cart: response.data.cart,
         isCartUpdating: false,
       });
     } catch (error) {

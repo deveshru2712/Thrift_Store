@@ -58,7 +58,7 @@ export const addToCart = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       message: "Product added to the cart",
-      user: updatedUser, // update this with cart
+      cart: updatedUser.cart, // update this with cart
     });
   } catch (error) {
     next(error);

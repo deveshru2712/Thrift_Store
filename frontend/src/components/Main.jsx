@@ -8,7 +8,6 @@ const Pagination = lazy(() => import("./Pagination"));
 
 import productStore from "../store/productStore";
 import cartStore from "../store/cartStore";
-import authStore from "../store/authStore";
 
 const Main = () => {
   const { productList, isLoading, getProducts } = productStore();
