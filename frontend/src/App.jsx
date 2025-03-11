@@ -39,6 +39,10 @@ const App = () => {
               element={user ? <Navigate to={"/"} /> : <LoginPage />}
             />
             <Route
+              path="/signup"
+              element={user ? <Navigate to={"/"} /> : <SignupPage />}
+            />
+            <Route
               path="/welcome"
               element={user ? <Navigate to={"/"} /> : <Welcome />}
             />
@@ -47,14 +51,9 @@ const App = () => {
               element={user ? <Home /> : <Navigate to={"/welcome"} />}
             />
             <Route
-              path="/signup"
-              element={user ? <Navigate to={"/"} /> : <SignupPage />}
-            />
-            <Route
               path="/product/:id"
               element={user ? <ProductPage /> : <Navigate to={"/welcome"} />}
             />
-
             <Route
               path="/cart"
               element={user ? <CartPage /> : <Navigate to={"/welcome"} />}

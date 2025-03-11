@@ -1,7 +1,5 @@
-import { json } from "express";
 import Product from "../models/product.model.js";
 import User from "../models/user.model.js";
-import { decodeBase64 } from "bcryptjs";
 
 export const getProducts = async (req, res, next) => {
   try {
@@ -63,11 +61,29 @@ export const getProductById = async (req, res, next) => {
 };
 
 export const searchProducts = async (req, res, next) => {
+  const { title } = req.params;
   try {
+    if (!title) {
+      return res.status(400).json({
+        success: false,
+        message: "Title is required for search.",
+      });
+    }
+
+    const products = await Product.find({
+      title: { $regex: title, $options: "i" },
+    });
+
+    return res.status(200).json({
+      success: true,
+      list: products,
+    });
   } catch (error) {
     next(error);
   }
 };
+
+// export const
 
 // export const createProducts = async (req, res, next) => {
 //   try {

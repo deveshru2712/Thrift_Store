@@ -12,11 +12,6 @@ const router = express.Router();
 
 router.get("/:id", protectRoute, getProductById);
 router.get("/", protectRoute, getProducts);
-router.get("/search", protectRoute, searchProducts);
-
-// router.get("/cart", protectRoute, getCart);
-// router.post("/cart/add/:id", protectRoute, addToCart);
-
-// router.post("/create", createProducts);
+router.get("/search/:title", protectRoute, searchProducts);
 
 export default router;
