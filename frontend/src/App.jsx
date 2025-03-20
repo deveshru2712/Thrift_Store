@@ -3,13 +3,13 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import "ldrs/trefoil";
 
 import authStore from "./store/authStore";
-
 const LoginPage = lazy(() => import("./Pages/LoginPage"));
 const SignupPage = lazy(() => import("./Pages/SignupPage"));
 const Welcome = lazy(() => import("./Pages/Welcome"));
 const Home = lazy(() => import("./Pages/HomePage"));
 const ProductPage = lazy(() => import("./Pages/ProductPage"));
 const CartPage = lazy(() => import("./Pages/CartPage"));
+const PageNotFound = lazy(() => import("./components/PageNotFound"));
 
 const App = () => {
   const { user, authCheck, isAuthChecking } = authStore();
@@ -58,6 +58,7 @@ const App = () => {
               path="/cart"
               element={user ? <CartPage /> : <Navigate to={"/welcome"} />}
             />
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </div>
       )}
