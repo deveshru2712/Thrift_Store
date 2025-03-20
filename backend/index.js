@@ -3,11 +3,15 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
+import path from "path";
+
 import connectToDb from "./config/Db.js";
 import errorHandler from "./middleware/errorHandler.js";
 import authRouter from "./routes/auth.routes.js";
 import productRouter from "./routes/product.routes.js";
 import cartRouter from "./routes/cart.routes.js";
+
+const __dirname = path.resolve();
 
 const app = express();
 dotenv.config();
@@ -31,6 +35,13 @@ app.use((req, res, next) => {
 
 app.use(errorHandler);
 
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/frontend/dist")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+  });
+}
 app.listen(port, () => {
   connectToDb();
   console.log(`The server is running on the port:${port}`);
