@@ -21,17 +21,13 @@ app.use(cors());
 
 const port = process.env.PORT;
 
-app.get("/", (req, res) => {
-  res.send("hii");
-});
+// app.get("/", (req, res) => {
+//   res.send("hii");
+// });
 
 app.use("/api/auth", authRouter);
 app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);
-
-app.use((req, res, next) => {
-  res.status(404).send("Page not found");
-});
 
 app.use(errorHandler);
 
@@ -42,6 +38,7 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
   });
 }
+
 app.listen(port, () => {
   connectToDb();
   console.log(`The server is running on the port:${port}`);
